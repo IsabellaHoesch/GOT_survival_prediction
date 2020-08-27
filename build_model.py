@@ -12,26 +12,26 @@ from sklearn.ensemble import RandomForestClassifier
 from sklearn.metrics import confusion_matrix
 import preprocessing as p
 
+"""
+Feature importance testing with RandomForestClassifier
+Insignificant feature dropping
+Model building with KNearest Neighbors
+"""
+
+
+got_clean = p.clean_variables()
 #############################################################################
 ## Model development
 #############################################################################
 
 ## Feature importance testing
 # checking which features DONT influence the target variable
-
-
 got_data = got_clean.loc[:, ~got_clean.columns.isin(['isAlive'])]
 got_target = got_clean.loc[:, 'isAlive']
 
-X_train, X_test, y_train, y_test = train_test_split(
-    got_data,
-    got_target,
-    test_size=0.1,
-    random_state=508,
-    stratify=got_target)
+X_train, X_test, y_train, y_test = train_test_split(got_data, got_target, test_size=0.1, random_state=508, stratify=got_target)
 
 # Full forest using gini
-
 full_forest_gini = RandomForestClassifier(n_estimators=1100,
                                           criterion='gini',
                                           max_depth=None,

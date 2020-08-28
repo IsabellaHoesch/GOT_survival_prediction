@@ -16,17 +16,17 @@ def describe_raw_data():
     - Missing Values' Exploration and Feature engeneering
     """
     got_raw = pd.read_excel(r'datafiles/GOT_character_predictions.xlsx')
-    print(got_raw.columns)
+    print("*"*50)
+    print("Raw data descriptives:")
+    print("\n",got_raw.columns)
     print("\n", got_raw.shape)
     print("\n", got_raw.info())
     print("\n", got_raw.describe().round(2))
     print("\n", got_raw.isnull().sum())
+    print("*" * 50)
     return got_raw
 
-describe_raw_data()
-
 ## Dropping categorical variables with more than 80% missing values
-
 def clean_variables(datafile=r'datafiles/GOT_character_predictions.xlsx'):
     """
     missing values treatment, replacing values, dummy treatment
@@ -38,7 +38,7 @@ def clean_variables(datafile=r'datafiles/GOT_character_predictions.xlsx'):
 
 
     # Looking at the remaining columns and its missing values
-    print(got_raw.isnull().sum())
+    got_raw.isnull().sum()
 
 
     #############################################################################
@@ -61,7 +61,7 @@ def clean_variables(datafile=r'datafiles/GOT_character_predictions.xlsx'):
     #############################################################################
     ##  Variable: house
     # Looking a total missing values in "house column"
-    print(got_raw['house'].isnull().sum())
+    got_raw['house'].isnull().sum()
 
     # Completing some missing values based on character's last name
     name_list = ['Stark', 'Targaryen', 'Durrandon', 'Mudd', 'Tyrell', 'Greyjoy', 'Martell', 'Hoare', 'Frey', 'Lannister', 'Baratheon', 'Florent']
@@ -73,7 +73,7 @@ def clean_variables(datafile=r'datafiles/GOT_character_predictions.xlsx'):
     got_raw.drop(["name"], axis = 1, inplace = True)
 
     # Looking a total missing values in "house column"
-    print(got_raw['house'].isnull().sum())
+    got_raw['house'].isnull().sum()
 
     # creating category unknown "U" for all characters with missing values in house
     got_raw["house"].fillna('House_U', inplace = True)
@@ -167,10 +167,7 @@ def clean_variables(datafile=r'datafiles/GOT_character_predictions.xlsx'):
     for key in house_dict:
         got_raw = got_raw.replace(house_dict[key], key)
 
-
     got_raw["house"].value_counts()
-
-
 
     #############################################################################
     ## Variable: title
@@ -291,16 +288,12 @@ def clean_variables(datafile=r'datafiles/GOT_character_predictions.xlsx'):
 
     got_raw["title"].fillna('Title_U', inplace = True)
 
-
     got_raw["title"].value_counts()
-
 
     #############################################################################
     # Variable books
     # Adding a new column to sum the number of books each character appeared in
-
     total_books = []
-
     for index, row in got_raw.iterrows():
         total_books.append(row.book1_A_Game_Of_Thrones +
                                row.book2_A_Clash_Of_Kings +
@@ -312,11 +305,9 @@ def clean_variables(datafile=r'datafiles/GOT_character_predictions.xlsx'):
     #############################################################################
     # Creating Dummies for CULTURE & selecting only those with more than 20 observations
     #############################################################################
-    got_raw["culture"].value_counts()
-
+    # got_raw["culture"].value_counts()
     culture_dummies = pd.get_dummies(list(got_raw['culture']), drop_first=True)
-    cu = culture_dummies.sum()
-
+    # cu = culture_dummies.sum()
     culture_selected_dummies = culture_dummies.loc[:, ['Cult_U',
                                                        'Northmen',
                                                        'Ironborn',
@@ -332,7 +323,6 @@ def clean_variables(datafile=r'datafiles/GOT_character_predictions.xlsx'):
     #############################################################################
     # Dummy treatment
     #############################################################################
-
     # Creating Dummies for TITLE & selecting only those with more than 20 observations
     got_raw["title"].value_counts()
 
@@ -381,7 +371,7 @@ def clean_variables(datafile=r'datafiles/GOT_character_predictions.xlsx'):
                                           'culture',
                                           'house'
                                           ])
-
+    print("\nData is cleaned and ready for feature selection\n")
     return got_clean
 
 
